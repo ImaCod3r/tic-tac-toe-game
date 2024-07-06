@@ -1,9 +1,14 @@
-# def main():
-#     pass
+def main():
+    pass
 
-# def DrawGame():
-#     print("  |  |  ")
-#     print("--------")
-#     print("  |  |  ")
-#     print("--------")
-#     print("  |  |  ")
+def DrawGame():
+    Rplays = 9
+    # Draw the game board
+    print("  |  |  ")
+    print("--------")
+    print("  |  |  ")
+    print("--------")
+    print("  |  |  ")
+    print("\nPlays remaining:" + str(Rplays))
+
+DrawGame()
