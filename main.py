@@ -1,25 +1,37 @@
-import os
+import os 
+import random
 
+# Game board
 board = [
     [" ", " "," "],
     [" ", " "," "],
     [" ", " "," "]
 ]
-
+# Game variables
 plays = 0
 thatsAWin = False
 isgameFinished = False
 
+# Game functions
 resetScreen = lambda: os.system("cls||clear")
 
+# Main function
 def main():
+    global plays, isgameFinished
+
     while not isgameFinished:
         DrawGame()
-        InputPlayer()
+        if plays >= 9 and not thatsAWin:
+            isgameFinished = True
+        else:
+            InputPlayer()
+            InputCPU()
+
         resetScreen()
     
     print("Finished game!")
 
+# Function that draws the game
 def DrawGame():
     global plays
 
@@ -32,24 +44,37 @@ def DrawGame():
     print(f"2 {board[2][0]} | {board[2][1]} | {board[2][2]}  ")
     print("\nPlays:" + str(plays))
 
-
+# Receive player input
 def InputPlayer():
-    global board, plays, isgameFinished
+    global board, plays
 
-    if plays >= 2 and not thatsAWin:
-        isgameFinished = True
-    else: 
-        try:
-            row = int(input("Enter row:"))
-            col = int(input("Enter column:"))
-        except:
-            print("Invalid input!")
-            InputPlayer()
-        else:
-            if row < len(board):
-                if col < len(board[row]):
-                    board[row][col] = "x"
-                    plays += 1
+    try:
+        row = int(input("Enter row:"))
+        col = int(input("Enter column:"))
+    except:
+        print("Invalid input!")
+        InputPlayer()
+    else:
+        if row < len(board):
+            if col < len(board[row]):
+                board[row][col] = "x"
+                plays += 1
+
+# CPU decisions
+def InputCPU():
+    global board, plays
+
+    row = random.randint(0,2)
+    col = random.randint(0,2)
+
+    if board[col] != " ":
+        board[row][col] = "o"
+        plays += 1
+    else:
+        InputCPU()
+    
+
+
             
-# Game function
+# Run function
 main()
