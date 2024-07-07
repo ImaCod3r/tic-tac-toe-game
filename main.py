@@ -11,25 +11,27 @@ board = [
 plays = 0
 thatsAWin = False
 isgameFinished = False
+winner = ""
 
 # Game functions
 resetScreen = lambda: os.system("cls||clear")
 
 # Main function
 def main():
-    global plays, isgameFinished
+    global plays, isgameFinished, winner
 
     while not isgameFinished:
         DrawGame()
-        if plays >= 9 and not thatsAWin:
+        if plays >= 9 or thatsAWin:
             isgameFinished = True
         else:
             InputPlayer()
             InputCPU()
-
-        resetScreen()
+            resetScreen()
     
     print("Finished game!")
+    if thatsAWin:
+        print(f"{winner} wons the game!")
 
 # Function that draws the game
 def DrawGame():
@@ -57,24 +59,58 @@ def InputPlayer():
     else:
         if row < len(board):
             if col < len(board[row]):
-                board[row][col] = "x"
-                plays += 1
-
+                if board[row][col] == " ":
+                    board[row][col] = "x"
+                    plays += 1
+                else:
+                    print("Look for another spot!")
+                    InputPlayer()
+    
+    WinChecker("x")
+                    
 # CPU decisions
 def InputCPU():
-    global board, plays
+    global board, plays, winner
 
     row = random.randint(0,2)
     col = random.randint(0,2)
 
-    if board[col] != " ":
+    if board[col] != "x":
         board[row][col] = "o"
         plays += 1
+        WinChecker("o")
     else:
-        InputCPU()
+        row = random.randint(0,2)
+        col = random.randint(0,2)
     
+def WinChecker(who):
+    global board, thatsAWin, winner
 
+    # Check rows
+    for row in board:
+        if row.count(who) == 3:
+            thatsAWin = True
+            winner = "CPU(o)" if who == "o" else "Player(x)"
+            return
 
-            
-# Run function
+    # Check columns
+    for col in range(3):
+        if board[0][col] == who and board[1][col] == who and board[2][col] == who:
+            thatsAWin = True
+            winner = "CPU(o)" if who == "o" else "Player(x)"
+            return
+
+    # Check diagonals
+    if board[0][0] == who and board[1][1] == who and board[2][2] == who:
+        thatsAWin = True
+        winner = "CPU(o)" if who == "o" else "Player(x)"
+        return
+    if board[0][2] == who and board[1][1] == who and board[2][0] == who:
+        thatsAWin = True
+        winner = "CPU(o)" if who == "o" else "Player(x)"
+        return
+ 
+# Runnner
 main()
+
+# --- Imacod3r --- #
